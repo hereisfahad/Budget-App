@@ -5,12 +5,33 @@ var UIController = (function(){
         addBtn:'.add__btn',
         Inputtype: '.add__type',
         Inputdescription: '.add__description',
-        Inputvalue: '.add__value'
+        Inputvalue: '.add__value',
+        expContainer:'.expenses__list',
+        incContainer:'.income__list'
     };
     
     
-    
+    //public methods
     return{
+        //add item/obj to UI
+        addListItem: function(type,obj){
+            var element,html,newHtml;
+            //get dummy html
+            if(type==="exp"){
+                element = domStrings.expContainer;//container
+                html = '<div class="item clearfix" id="income-%id%"><div class="item__description">%des%</div><div class="right clearfix"><div class="item__value">%val%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>'
+            }else{
+                element = domStrings.incContainer;
+                html =  '<div class="item clearfix" id="expense-%id%"><div class="item__description">%des%</div><div class="right clearfix"><div class="item__value">%val%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>'
+            }
+            //replace values 
+            newHtml = html.replace('%id%',obj.id);
+            newHtml = newHtml.replace('%des%',obj.description);
+            newHtml = newHtml.replace('%val%',obj.value);
+            //insert newHtm to container
+            document.querySelector(element).insertAdjacentHTML('beforeend',newHtml);
+        },
+        
         getInputs: function(){
             return{
                 type: document.querySelector(domStrings.Inputtype).value,//either inc or exp,
@@ -31,7 +52,7 @@ var UIController = (function(){
 //BudgetController
 var BudgetController = (function(){
     //income constructor
-    var Incomes = function(id,description,value){
+    var Income = function(id,description,value){
         this.id = id;
         this.description = description;
         this.value = value;
@@ -55,7 +76,7 @@ var BudgetController = (function(){
     }
     
     
-    
+    //public methods
     return{
         //public function to create and add exp or income to  data                
         addItem: function(type,des,val){
@@ -70,7 +91,7 @@ var BudgetController = (function(){
             if(type === "exp"){
                 newItem = new Expenses(id,des,val)
             }else if(type === "inc"){//create income object
-                newItem = new Incomes(id,des,val)
+                newItem = new Income(id,des,val)
             }
             //push the newItem object in the respective array of data
             data.totalItems[type].push(newItem);
@@ -88,10 +109,11 @@ var Controller = (function(budgetCtrl,uiCtrl){
     //add btn handler
     var ctrlAddBtn = function(){
         //get inputs
-        inputs = uiCtrl.getInputs();//1
+        inputs = uiCtrl.getInputs();    //1
 //        console.log(uiCtrl.getInputs());  //inputs from UI  
-        newItem = budgetCtrl.addItem(inputs.type,inputs.description,inputs.value);
-        console.log(newItem);//output the newTiem object
+        newItem = budgetCtrl.addItem(inputs.type,inputs.description,inputs.value);//2
+//        console.log(newItem);//output the newTiem object
+        uiCtrl.addListItem(inputs.type,newItem);//3
     }
     
     var setUpEventListener = function(){
@@ -106,7 +128,7 @@ var Controller = (function(budgetCtrl,uiCtrl){
         });
     }
     
-    
+    //public methods
     return{
         init: function(){
             setUpEventListener();
