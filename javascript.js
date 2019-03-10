@@ -42,30 +42,34 @@ var BudgetController = (function(){
 
 //GlobalController
 var Controller = (function(bugetCtrl,uiCtrl){
-    //get dom strings
-   var strings = uiCtrl.getDomStrings();
+    
     //add btn handler
     var ctrlAddBtn = function(){
-        console.log('add btn is clicked');
         //get inputs
         uiCtrl.getInputs();
-        console.log(uiCtrl.getInputs());
-           
+        console.log(uiCtrl.getInputs());       
     }
     
-    //add event listener
-    document.querySelector(strings.addBtn).addEventListener('click',ctrlAddBtn);
+    var setUpEventListener = function(){
+        //get dom strings
+        var strings = uiCtrl.getDomStrings();
+        //add event listener
+        document.querySelector(strings.addBtn).addEventListener('click',ctrlAddBtn);
+        document.addEventListener('keypress',function(event){
+            if(event.keyCode==13 || event.which==13){
+                ctrlAddBtn();
+            }
+        });
+    }
     
-    document.addEventListener('keypress',function(event){
-        if(event.keyCode==13 || event.which==13){
-            ctrlAddBtn();
-        }
-    });
     
     return{
-        ctrlAddBtn: ctrlAddBtn
+        init: function(){
+            setUpEventListener();
+        },
     }
+    
 })(BudgetController,UIController);
 
 
-//Controller.ctrlAddBtn();
+Controller.init();
