@@ -39,8 +39,14 @@ var UIController = (function(){
                 value: document.querySelector(domStrings.Inputvalue).value
             }
         },
+        
         getDomStrings: function(){
             return domStrings;
+        },
+        
+        clearInputs(){
+            document.querySelector(domStrings.Inputdescription).value = '';
+            document.querySelector(domStrings.Inputvalue).value = '';
         }
     };
     
@@ -114,6 +120,7 @@ var Controller = (function(budgetCtrl,uiCtrl){
         newItem = budgetCtrl.addItem(inputs.type,inputs.description,inputs.value);//2
 //        console.log(newItem);//output the newTiem object
         uiCtrl.addListItem(inputs.type,newItem);//3
+        uiCtrl.clearInputs();   //4
     }
     
     var setUpEventListener = function(){
