@@ -36,7 +36,7 @@ var UIController = (function(){
             return{
                 type: document.querySelector(domStrings.Inputtype).value,//either inc or exp,
                 description: document.querySelector(domStrings.Inputdescription).value,
-                value: document.querySelector(domStrings.Inputvalue).value
+                value: parseFloat(document.querySelector(domStrings.Inputvalue).value)
             }
         },
         
@@ -45,6 +45,9 @@ var UIController = (function(){
         },
         
         clearInputs(){
+            //can also use querySelectorAll which return list..
+            //slice list as Array.prototype.slice.call(list).
+            //then change value to '' by calling loop e.g. foreache(curnt,i,arr)
             document.querySelector(domStrings.Inputdescription).value = '';
             document.querySelector(domStrings.Inputvalue).value = '';
         }
@@ -103,6 +106,9 @@ var BudgetController = (function(){
             data.totalItems[type].push(newItem);
             return newItem;
         },
+        testing:function(){
+            return data;
+    }
 
     }
 })();
@@ -117,10 +123,17 @@ var Controller = (function(budgetCtrl,uiCtrl){
         //get inputs
         inputs = uiCtrl.getInputs();    //1
 //        console.log(uiCtrl.getInputs());  //inputs from UI  
-        newItem = budgetCtrl.addItem(inputs.type,inputs.description,inputs.value);//2
-//        console.log(newItem);//output the newTiem object
-        uiCtrl.addListItem(inputs.type,newItem);//3
-        uiCtrl.clearInputs();   //4
+        if(inputs.description !== '' && !isNaN(inputs.value) && inputs.value > 0){
+            newItem = budgetCtrl.addItem(inputs.type,inputs.description,inputs.value);//2
+//          console.log(newItem);//output the newTiem object
+            uiCtrl.addListItem(inputs.type,newItem);//3
+            uiCtrl.clearInputs();   //4
+            
+        }
+        
+    }
+    var updateBudget = function(){
+        console.log('updating bugdet')
     }
     
     var setUpEventListener = function(){
