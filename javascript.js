@@ -81,7 +81,18 @@ var BudgetController = (function(){
         totals: {
             exp: 0,
             inc: 0
-        }
+        },
+        budget: 0,
+        percentage: -1
+    }
+    
+    var calculateTotals = function(type){
+         var sum = 0;
+            var item = data.totalItems[type];
+            item.forEach(function(current){
+                sum += current.value;
+            });
+            data.totals[type] = sum;
     }
     
     
@@ -106,9 +117,28 @@ var BudgetController = (function(){
             data.totalItems[type].push(newItem);
             return newItem;
         },
-        testing:function(){
+        testing: function(){
             return data;
-    }
+        },
+        calculateBudget: function(type){
+            calculateTotals('inc');
+            calculateTotals('exp');
+            data.budget = data.totals.inc - data.totals.exp;
+            if(data.totals.inc > 0){
+                data.percentage = Math.round((data.totals.exp/data.totals.inc)*100);
+                console.log()
+            }else{
+                data.percentage = -1;
+            }
+        },
+        getBudget: function(){
+            return{
+                budget: data.budget,
+                totalInc: data.totals.inc,
+                totalExp: data.totals.exp,
+                percentage: data.percentage
+            }
+        }
 
     }
 })();
@@ -128,12 +158,17 @@ var Controller = (function(budgetCtrl,uiCtrl){
 //          console.log(newItem);//output the newTiem object
             uiCtrl.addListItem(inputs.type,newItem);//3
             uiCtrl.clearInputs();   //4
+            updateBudget();     //5
             
         }
         
     }
     var updateBudget = function(){
-        console.log('updating bugdet')
+        budgetCtrl.calculateBudget();
+        var budget = budgetCtrl.getBudget();
+        console.log(budget);
+        
+//        budgetInUI();   //3
     }
     
     var setUpEventListener = function(){
