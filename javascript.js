@@ -58,10 +58,11 @@ var UIController = (function(){
         },
         
         displayBudget: function(obj){
+            console.log(obj);
             document.querySelector(domStrings.budgetLabel).textContent = obj.budget;
-            document.querySelector(domStrings.budgetIncomeLabel).textContent = obj.inc;
-            document.querySelector(domStrings.budgetExpenseLabel).textContent = obj.exp;
-            if(obj.percentage > 0){
+            document.querySelector(domStrings.budgetIncomeLabel).textContent = obj.totalInc;
+            document.querySelector(domStrings.budgetExpenseLabel).textContent = obj.totalExp;
+            if(obj.percentage > 0 && obj.percentage < 100){
                 document.querySelector(domStrings.percentage).textContent = obj.percentage+'%';    
             }else{
                 document.querySelector(domStrings.percentage).textContent = '--'
@@ -144,7 +145,7 @@ var BudgetController = (function(){
             data.budget = data.totals.inc - data.totals.exp;
             if(data.totals.inc > 0){
                 data.percentage = Math.round((data.totals.exp/data.totals.inc)*100);
-                console.log()
+//                console.log()
             }else{
                 data.percentage = -1;
             }
@@ -184,7 +185,7 @@ var Controller = (function(budgetCtrl,uiCtrl){
     var updateBudget = function(){
         budgetCtrl.calculateBudget();
         var budget = budgetCtrl.getBudget();
-        console.log(budget);
+//        console.log(budget);
         uiCtrl.displayBudget(budget);
     }
     
