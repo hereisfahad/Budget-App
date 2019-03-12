@@ -7,7 +7,12 @@ var UIController = (function(){
         Inputdescription: '.add__description',
         Inputvalue: '.add__value',
         expContainer:'.expenses__list',
-        incContainer:'.income__list'
+        incContainer:'.income__list',
+        budgetLabel: '.budget__value',
+        budgetIncomeLabel: '.budget__income--value',
+        budgetExpenseLabel: '.budget__expenses--value',
+        percentage: '.budget__expenses--percentage'
+        
     };
     
     
@@ -44,13 +49,26 @@ var UIController = (function(){
             return domStrings;
         },
         
-        clearInputs(){
+        clearInputs:function(){
             //can also use querySelectorAll which return list..
             //slice list as Array.prototype.slice.call(list).
             //then change value to '' by calling loop e.g. foreache(curnt,i,arr)
             document.querySelector(domStrings.Inputdescription).value = '';
             document.querySelector(domStrings.Inputvalue).value = '';
+        },
+        
+        displayBudget: function(obj){
+            document.querySelector(domStrings.budgetLabel).textContent = obj.budget;
+            document.querySelector(domStrings.budgetIncomeLabel).textContent = obj.inc;
+            document.querySelector(domStrings.budgetExpenseLabel).textContent = obj.exp;
+            if(obj.percentage > 0){
+                document.querySelector(domStrings.percentage).textContent = obj.percentage+'%';    
+            }else{
+                document.querySelector(domStrings.percentage).textContent = '--'
+            }
+            
         }
+    
     };
     
     
@@ -167,8 +185,7 @@ var Controller = (function(budgetCtrl,uiCtrl){
         budgetCtrl.calculateBudget();
         var budget = budgetCtrl.getBudget();
         console.log(budget);
-        
-//        budgetInUI();   //3
+        uiCtrl.displayBudget(budget);
     }
     
     var setUpEventListener = function(){
@@ -186,7 +203,13 @@ var Controller = (function(budgetCtrl,uiCtrl){
     //public methods
     return{
         init: function(){
-            setUpEventListener();
+            uiCtrl.displayBudget({
+            budget: 0,
+            totalInc: 0,
+            totalExp: 0,
+            percentage: '--'
+        });
+        setUpEventListener();
         },
     }
     
