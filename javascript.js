@@ -38,6 +38,11 @@ var UIController = (function(){
             document.querySelector(element).insertAdjacentHTML('beforeend',newHtml);
         },
         
+        deleteItemFormUI: function(id){
+            var ele = document.getElementById(id);
+            ele.parentNode.removeChild(ele);
+        },
+        
         getInputs: function(){
             return{
                 type: document.querySelector(domStrings.Inputtype).value,//either inc or exp,
@@ -174,6 +179,7 @@ var BudgetController = (function(){
         }
 
     }
+    
 })();
 
 
@@ -223,9 +229,11 @@ var Controller = (function(budgetCtrl,uiCtrl){
         if(targetID){
             splitID = targetID.split('-');
             type = splitID[0];
-            id = parseInt(splitID[1]);
+            id = parseInt(splitID[1]); 
 //            console.log(splitID);
             budgetCtrl.deletItemfromdata(type,id);
+            uiCtrl.deleteItemFormUI(targetID); // target id as inc-% or exp-%
+            updateBudget();
         }
         
     }
