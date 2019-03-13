@@ -11,7 +11,8 @@ var UIController = (function(){
         budgetLabel: '.budget__value',
         budgetIncomeLabel: '.budget__income--value',
         budgetExpenseLabel: '.budget__expenses--value',
-        percentage: '.budget__expenses--percentage'
+        percentage: '.budget__expenses--percentage',
+        Container: '.container'
         
     };
     
@@ -22,12 +23,12 @@ var UIController = (function(){
         addListItem: function(type,obj){
             var element,html,newHtml;
             //get dummy html
-            if(type==="exp"){
-                element = domStrings.expContainer;//container
-                html = '<div class="item clearfix" id="income-%id%"><div class="item__description">%des%</div><div class="right clearfix"><div class="item__value">%val%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>'
+            if(type==="inc"){
+                element = domStrings.incContainer;//container
+                html = '<div class="item clearfix" id="inc-%id%"><div class="item__description">%des%</div><div class="right clearfix"><div class="item__value">%val%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>'
             }else{
-                element = domStrings.incContainer;
-                html =  '<div class="item clearfix" id="expense-%id%"><div class="item__description">%des%</div><div class="right clearfix"><div class="item__value">%val%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>'
+                element = domStrings.expContainer;
+                html =  '<div class="item clearfix" id="exp-%id%"><div class="item__description">%des%</div><div class="right clearfix"><div class="item__value">%val%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>'
             }
             //replace values 
             newHtml = html.replace('%id%',obj.id);
@@ -58,7 +59,7 @@ var UIController = (function(){
         },
         
         displayBudget: function(obj){
-            console.log(obj);
+//            console.log(obj);
             document.querySelector(domStrings.budgetLabel).textContent = obj.budget;
             document.querySelector(domStrings.budgetIncomeLabel).textContent = obj.totalInc;
             document.querySelector(domStrings.budgetExpenseLabel).textContent = obj.totalExp;
@@ -136,8 +137,21 @@ var BudgetController = (function(){
             data.totalItems[type].push(newItem);
             return newItem;
         },
+        
+        deletItemfromdata : function(type,id){
+            var idsArray,index
+            idsArray = data.totalItems[type].map(function(current){
+                return current.id;
+            }); 
+            index = idsArray.indexOf(id);
+            console.log(index);
+            if(index !== -1){
+                data.totalItems[type].splice(index,1);
+            }
+        },
+        
         testing: function(){
-            return data;
+            console.log(data);
         },
         calculateBudget: function(type){
             calculateTotals('inc');
@@ -199,8 +213,22 @@ var Controller = (function(budgetCtrl,uiCtrl){
                 ctrlAddBtn();
             }
         });
+        document.querySelector(strings.Container).addEventListener('click',deleteItem);
     }
     
+    var deleteItem = function(event){
+        
+        targetID = event.target.parentNode.parentNode.parentNode.parentNode.id;
+//        console.log(targetID);
+        if(targetID){
+            splitID = targetID.split('-');
+            type = splitID[0];
+            id = parseInt(splitID[1]);
+//            console.log(splitID);
+            budgetCtrl.deletItemfromdata(type,id);
+        }
+        
+    }
     //public methods
     return{
         init: function(){
