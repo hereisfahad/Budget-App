@@ -17,7 +17,18 @@ var UIController = (function(){
         
     };
     
-    
+    var foramtNumber = function(num,type){
+        var numSplit,int;
+        num = Math.abs(num);
+        num = num.toFixed(2);
+        numSplit = num.split('.');
+        int = numSplit[0];
+        dec = numSplit[1];
+        if(int.length > 3){
+            int = int.substr(0,int.length-3) + ',' + int.substr(int.length-3,int.length);
+        }
+        return (type === 'inc' ? '+' : '-') + int + '.' + dec;
+    }
     //public methods
     return{
         //add item/obj to UI
@@ -34,7 +45,7 @@ var UIController = (function(){
             //replace values 
             newHtml = html.replace('%id%',obj.id);
             newHtml = newHtml.replace('%des%',obj.description);
-            newHtml = newHtml.replace('%val%',obj.value);
+            newHtml = newHtml.replace('%val%',foramtNumber(obj.value,type));
             //insert newHtm to container
             document.querySelector(element).insertAdjacentHTML('beforeend',newHtml);
         },
@@ -66,7 +77,10 @@ var UIController = (function(){
         
         displayBudget: function(obj){
 //            console.log(obj);
-            document.querySelector(domStrings.budgetLabel).textContent = obj.budget;
+            if(obj.budget > 0){
+                type = 'inc';
+            }else { type = 'exp';}
+            document.querySelector(domStrings.budgetLabel).textContent = foramtNumber(obj.budget,type);
             document.querySelector(domStrings.budgetIncomeLabel).textContent = obj.totalInc;
             document.querySelector(domStrings.budgetExpenseLabel).textContent = obj.totalExp;
             if(obj.percentage > 0 && obj.percentage < 100){
@@ -253,7 +267,7 @@ var Controller = (function(budgetCtrl,uiCtrl){
     var updatePercentage = function(){
         budgetCtrl.calculatePercentage();
         var percentages = budgetCtrl.getPercentages();
-        console.log(percentages);
+//        console.log(percentages);
         uiCtrl.displayPercentages(percentages);
     }
     
