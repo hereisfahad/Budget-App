@@ -99,14 +99,22 @@ var UIController = (function(){
             var elements = document.querySelectorAll(domStrings.itemsPercentages);
 //            console.log(elements);
             //iterating over nodlist
-            Array.prototype.forEach.call(elements,function(curr,index){
+//            Array.prototype.forEach.call(elements,function(curr,index){
+//                if(percentages[index] > 0){
+//                    curr.textContent = percentages[index] + '%';
+//                }else{
+//                    curr.textContent = '--';
+//                }
+//                
+//            });
+            elements.forEach(function(curr,index){
                 if(percentages[index] > 0){
                     curr.textContent = percentages[index] + '%';
                 }else{
                     curr.textContent = '--';
-                }
-                
+                };
             });
+            
         },
         
         displayData : function(){
@@ -127,9 +135,12 @@ var UIController = (function(){
             
 //            console.log(fields);
             
-            Array.prototype.forEach.call(fields,function(current){
+//            Array.prototype.forEach.call(fields,function(current){
+//                current.classList.toggle('red-focus');
+//            });
+            fields.forEach(function(current){
                 current.classList.toggle('red-focus');
-            });
+            })
             
             document.querySelector(domStrings.addBtn).classList.toggle('red');
         }
