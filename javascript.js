@@ -13,7 +13,9 @@ var UIController = (function(){
         budgetExpenseLabel: '.budget__expenses--value',
         percentage: '.budget__expenses--percentage',
         Container: '.container',
-        itemsPercentages: '.item__percentage'
+        itemsPercentages: '.item__percentage',
+        dateLabel: '.budget__title--month'
+        
         
     };
     
@@ -103,6 +105,15 @@ var UIController = (function(){
                 }
                 
             });
+        },
+        
+        displayData : function(){
+            var now, month, months, year;
+            now = new Date();
+            month = now.getMonth(); //return the index of the current month
+            year = now.getFullYear();
+            months = ['January','February','March','April','May','June','Julu','August','September','October','November','December'];
+            document.querySelector(domStrings.dateLabel).textContent = months[month] +' ' + year;
         }
     
     };
@@ -303,6 +314,8 @@ var Controller = (function(budgetCtrl,uiCtrl){
     //public methods
     return{
         init: function(){
+            console.log('start budgetign \'Khatam_Shudd\'')
+            uiCtrl.displayData();
             uiCtrl.displayBudget({
             budget: 0,
             totalInc: 0,
