@@ -14,6 +14,7 @@
     clear: both;
 }
 
+
 body {
     color: #555;
     font-family: Open Sans;
@@ -25,7 +26,7 @@ body {
 
 .right { float: right; }
 .red { color: #FF5049 !important; }
-.red-focus:focus { border: 1px solid #FF5049 !important; }
+.red-focus:focus {border: 1px solid #FF5049 !important;}
 
 /**********************************************
 *** TOP PART
@@ -134,6 +135,7 @@ body {
     margin-right: 10px;
     font-weight: 300;
     transition: border 0.3s;
+    border-radius: 5px
 }
 
 .add__description,

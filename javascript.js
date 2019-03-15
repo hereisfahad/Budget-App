@@ -81,10 +81,12 @@ var UIController = (function(){
 //            console.log(obj);
             if(obj.budget > 0){
                 type = 'inc';
-            }else { type = 'exp';}
+            }else{
+                type = 'exp';
+            }
             document.querySelector(domStrings.budgetLabel).textContent = foramtNumber(obj.budget,type);
-            document.querySelector(domStrings.budgetIncomeLabel).textContent = obj.totalInc;
-            document.querySelector(domStrings.budgetExpenseLabel).textContent = obj.totalExp;
+            document.querySelector(domStrings.budgetIncomeLabel).textContent = foramtNumber(obj.totalInc);
+            document.querySelector(domStrings.budgetExpenseLabel).textContent = foramtNumber(obj.totalExp);
             if(obj.percentage > 0 && obj.percentage < 100){
                 document.querySelector(domStrings.percentage).textContent = obj.percentage+'%';    
             }else{
@@ -95,7 +97,7 @@ var UIController = (function(){
         
         displayPercentages: function(percentages){
             var elements = document.querySelectorAll(domStrings.itemsPercentages);
-            console.log(elements);
+//            console.log(elements);
             //iterating over nodlist
             Array.prototype.forEach.call(elements,function(curr,index){
                 if(percentages[index] > 0){
@@ -114,12 +116,25 @@ var UIController = (function(){
             year = now.getFullYear();
             months = ['January','February','March','April','May','June','Julu','August','September','October','November','December'];
             document.querySelector(domStrings.dateLabel).textContent = months[month] +' ' + year;
+        },
+        
+        changedType : function(){
+//            console.log('type changed');
+            var fields = document.querySelectorAll(
+            domStrings.Inputtype + ',' +
+            domStrings.Inputdescription + ',' +
+            domStrings.Inputvalue);
+            
+//            console.log(fields);
+            
+            Array.prototype.forEach.call(fields,function(current){
+                current.classList.toggle('red-focus');
+            });
+            
+            document.querySelector(domStrings.addBtn).classList.toggle('red');
         }
-    
+     
     };
-    
-    
-    
 })();
 
 
@@ -199,7 +214,7 @@ var BudgetController = (function(){
                 return current.id;
             }); 
             index = idsArray.indexOf(id);
-            console.log(index);
+//            console.log(index);
             if(index !== -1){
                 data.totalItems[type].splice(index,1);
             }
@@ -293,6 +308,7 @@ var Controller = (function(budgetCtrl,uiCtrl){
             }
         });
         document.querySelector(strings.Container).addEventListener('click',deleteItem);
+        document.querySelector(strings.Inputtype).addEventListener('change',uiCtrl.changedType)
     }
     
     var deleteItem = function(event){
